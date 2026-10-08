@@ -1,0 +1,108 @@
+version: '3'
+
+vars:
+  GOLANG_CI_LINT_VERSION: v1.59.1
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  # Build tasks
+  build:
+    desc: Build all modules
+    cmds:
+      - go work sync
+      - go build -o bin/fenix ./cmd/fenix
+
+  build:core:
+    desc: Build core module
+    cmds:
+      - go build ./core/...
+
+  build:cli:
+    desc: Build CLI
+    cmds:
+      - go build -o bin/fenix ./cmd/fenix
+
+  # Test tasks
+  test:
+    desc: Run all tests
+    cmds:
+      - go work test ./...
+
+  test:core:
+    desc: Run core tests
+    cmds:
+      - go test ./core/...
+
+  test:race:
+    desc: Run tests with race detector
+    cmds:
+      - go work test -race ./...
+
+  test:cover:
+    desc: Run tests with coverage
+    cmds:
+      - go work test -cover ./...
+
+  # Linting and formatting
+  lint:
+    desc: Run golangci-lint
+    cmds:
+      - golangci-lint run ./...
+
+  fmt:
+    desc: Format all Go code
+    cmds:
+      - go fmt ./...
+      - goimports -w .
+
+  vet:
+    desc: Run go vet
+    cmds:
+      - go vet ./...
+
+  # Dependency management
+  deps:
+    desc: Download all dependencies
+    cmds:
+      - go work download
+
+  tidy:
+    desc: Tidy all go.mod files
+    cmds:
+      - go work tidy
+
+  # Clean
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -rf bin/
+      - rm -rf core/bin/
+      - rm -rf cmd/fenix/bin/
+
+  # Development
+  dev:
+    desc: Run in development mode
+    cmds:
+      - go run ./cmd/fenix
+
+  # Documentation
+  docs:
+    desc: Generate documentation
+    cmds:
+      - godoc -http=:6060 &
+      - echo "Documentation available at http://localhost:6060"
+
+  # Setup
+  setup:
+    desc: Install development tools
+    cmds:
+      - echo "Installing Go tools..."
+      - go install github.com/go-task/task/v3/cmd/task@latest
+      - go install golang.org/x/tools/cmd/goimports@latest
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@{{.GOLANG_CI_LINT_VERSION}}
+      - go install golang.org/x/tools/cmd/godoc@latest
+      - echo "Tools installed successfully"
