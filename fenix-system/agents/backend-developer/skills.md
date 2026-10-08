@@ -1,0 +1,19 @@
+---
+skills:
+  - CompileSolution
+  - GenerateController
+  - GenerateService
+  - GenerateRepository
+  - GenerateDTO
+  - GenerateEntity
+  - GenerateMigration
+  - GenerateSwagger
+  - GenerateUnitTests
+  - ExecuteUnitTests
+  - AnalyzeLogs
+  - RefactorCode
+  - ReadRepository
+  - SearchProductMemory
+  - DetectBreakingChanges
+  - OptimizePerformance
+---

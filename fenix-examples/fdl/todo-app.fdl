@@ -1,0 +1,167 @@
+# Fénix Definition Language (FDL) Example
+# Simple Todo Application
+
+product TodoApp
+
+vision
+    A modern, cross-platform todo application with real-time sync
+    and collaboration features. Supports multiple lists, tags,
+    due dates, and team sharing.
+
+users
+    User
+        Creates and manages todos
+        Can share lists with others
+        Sets due dates and priorities
+
+    Admin
+        Manages user accounts
+        Monitors system health
+
+constraints
+    MaxLatency: 100ms
+        Real-time sync must be fast
+
+    OfflineSupport
+        App must work offline with sync on reconnect
+
+    GDPR
+        User data deletion on request
+
+feature TaskManagement
+    story CreateTodo
+        requirement
+            User can create a new todo item
+            Todo must have a title
+            Optional: description, due date, priority, tags
+        acceptance
+            Given a user wants to add a task
+            When they enter a title and save
+            Then the todo is created
+            And it appears in their list
+        architecture
+            API
+                TodoService
+                    Creates todo items
+                    Validates input
+            Database
+                PostgreSQL
+                    Stores todos with metadata
+        tests
+            Unit: Input validation
+            Integration: Database persistence
+
+    story CompleteTodo
+        requirement
+            User can mark todo as completed
+            Completed todos move to done section
+            User can uncomplete todos
+        acceptance
+            Given a user has an active todo
+            When they mark it as complete
+            Then it moves to completed section
+            And they can restore it if needed
+        architecture
+            API
+                TodoService
+                    Updates todo status
+            Database
+                PostgreSQL
+                    Updates todo records
+        tests
+            Unit: Status update logic
+            Integration: Database update
+
+feature Lists
+    story CreateList
+        requirement
+            User can create multiple todo lists
+            Lists can be named and colored
+            Default list is created on signup
+        acceptance
+            Given a user wants to organize tasks
+            When they create a new list
+            Then the list is created
+            And they can add todos to it
+        architecture
+            API
+                ListService
+                    Manages todo lists
+            Database
+                PostgreSQL
+                    Stores list metadata
+        tests
+            Unit: List creation
+            Integration: Default list creation
+
+feature Sharing
+    story ShareList
+        requirement
+            User can share list with others
+            Sharee can view and edit shared list
+            Owner can revoke access
+        acceptance
+            Given a user wants to collaborate
+            When they share a list with email
+            Then the recipient gets access
+            And they can edit todos
+        architecture
+            API
+                SharingService
+                    Manages permissions
+                    Handles invitations
+            Database
+                PostgreSQL
+                    Stores sharing relationships
+        tests
+            Unit: Permission logic
+            Integration: Invitation flow
+
+feature Sync
+    story RealtimeSync
+        requirement
+            Changes sync across devices in real-time
+            Offline changes sync on reconnect
+            Conflict resolution: last write wins
+        acceptance
+            Given a user has multiple devices
+            When they make a change on one device
+            Then it appears on other devices
+            And offline changes sync when back online
+        architecture
+            Realtime
+                WebSocket
+                    Pushes changes to clients
+                SyncService
+                    Handles conflict resolution
+            Database
+                PostgreSQL
+                    Stores version history
+        tests
+            Integration: WebSocket sync
+            Unit: Conflict resolution
+
+implementation
+    Backend
+        Language: Go 1.22+
+        Framework: Chi router
+        Database: PostgreSQL 15
+        Realtime: WebSocket
+
+    Frontend
+        Framework: React 18
+        Meta-framework: Next.js 14
+        UI Library: Tailwind CSS
+        State Management: Zustand
+
+    Mobile
+        Framework: React Native
+        State: Redux Toolkit
+
+release
+    v1.0
+        MVP with core features
+        Todo CRUD
+        Lists
+        Basic sharing
+        Web app only

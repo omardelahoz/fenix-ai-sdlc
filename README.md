@@ -1,328 +1,219 @@
-# 🔥 Fenix AI SDLC
+# 🔥 Fénix AI SDLC
 
-> **The AI Operating System for Software Engineering**
+> **The AI-Native Engineering Operating System**
 
-Fenix AI SDLC is an open, model-agnostic Software Development Life Cycle (SDLC) platform that orchestrates specialized AI agents to automate software engineering from idea to production.
+Fénix is not just another AI coding framework or agent orchestrator. It is a full-fledged **AI-Native Engineering Operating System** built around declarative specifications rather than imperative scripts. 
 
-Rather than acting as a code generator, Fenix serves as an **AI Operating System for Software Engineering**, coordinating specialized agents, reusable skills, structured pipelines, and persistent product memory to manage projects throughout their entire lifecycle.
-
----
-
-# 🚀 Vision
-
-Build a universal AI engineering platform that can be installed once and used across any software project, regardless of:
-
-- Programming language
-- Framework
-- Architecture
-- Cloud provider
-- AI model
-
-Fenix separates the execution engine from agent definitions, making it possible to support multiple AI ecosystems such as:
-
-- Claude Code
-- Antigravity
-- Future AI coding assistants
-- Local LLMs
-- Cloud LLM providers
-
-without modifying the project itself.
+Instead of relying on prompt engineering or fragile ad-hoc instructions, products, workflows, and processors in Fénix are described using custom **Domain-Specific Languages (DSLs)**. These languages are compiled into a canonical engineering model, allowing the platform to manage the entire Software Development Life Cycle (SDLC) deterministically, where the orchestration of AI agents is just the final execution step.
 
 ---
 
-# 🎯 Goals
+## 🚀 The Fénix Language System
 
-- Automate the entire Software Development Life Cycle
-- Provide persistent project memory
-- Coordinate multiple specialized AI agents
-- Execute tasks in parallel whenever possible
-- Produce high-quality software with minimal human intervention
-- Keep humans in control of critical decisions
-- Be extensible, configurable, and model-agnostic
+Fénix introduces three domain-specific languages that form the heart of the system:
 
----
+- **FDL (Fénix Definition Language):** Describes **WHAT** the product is (Entities, UI, Architecture).
+- **WDL (Workflow Definition Language):** Describes **HOW** engineering workflows execute (Pipelines, CI/CD).
+- **PMF (Processor Manifest Format):** Describes **HOW** plugins and processors integrate into the platform.
 
-# 🏗 Core Principles
-
-- **Model Agnostic**
-- **Multi-Agent Architecture**
-- **Parallel by Design**
-- **Persistent Product Memory**
-- **Declarative Configuration**
-- **Reusable Skills**
-- **Template Driven**
-- **Human-in-the-Loop**
-- **Extensible Runtime**
-- **Reproducible Workflows**
+These languages are processed by a custom-built, industrial-grade compiler pipeline that features a Lexer, Parser, AST, Binder, and Semantic Model. 
 
 ---
 
-# 📦 Planned Architecture
+## ⚙️ The Compiler Pipeline
 
-```
-                Fenix AI SDLC
+Fénix's biggest innovation is its execution pipeline. Instead of sending raw text to an LLM, Fénix compiles declarative DSLs into structured Intermediate Representations (IR):
 
-            CLI / IDE / Dashboard
-
-                    │
-                    ▼
-
-              Fenix Engine
-                    │
-     ┌──────────────┼──────────────┐
-     │              │              │
- Runtime      Product Memory   Validation
-     │              │              │
- Harness      Knowledge Base  Report Engine
-     │
- Managers
-     │
- Agents
-     │
- Skills
-     │
- Adapters
-     │
- Claude • Antigravity • Future Models
+```text
+FDL / WDL / PMF
+       │
+       ▼
+ Fénix Language System (Lexer, Parser, AST, Binder)
+       │
+       ▼
+ Canonical Language IR
+       │
+       ▼
+ Engineering IR Builder
+       │
+       ▼
+   Fénix Runtime
+       │
+       ▼
+   Execution (AI Agents / Adapters)
 ```
 
 ---
 
-# 📁 Repository Structure
+## 🏗 Planned Architecture
 
+```text
+                  Fenix AI SDLC
+
+              CLI • IDE • Dashboard
+
+                       │
+                       ▼
+
+            Fenix Language System
+        (FDL • WDL • PMF Compiler)
+
+                       │
+                       ▼
+
+              Canonical Language IR
+
+                       │
+                       ▼
+
+              Engineering IR Builder
+
+                       │
+                       ▼
+
+                 Fenix Runtime
+
+        ┌────────────┼────────────┐
+        │            │            │
+ Product Memory  Validation   Report Engine
+        │            │            │
+        └────────────┼────────────┘
+                     │
+                     ▼
+             Multi-Agent Orchestrator
+                     │
+                     ▼
+          Claude • Codex • Gemini • ...
 ```
+
+---
+
+## 🧠 Product Memory (Knowledge Graph)
+
+Product Memory in Fénix is not just a document database. It is a rich, structured **Knowledge Graph** containing:
+
+- Specifications & Requirements
+- Architecture & Decisions (ADRs)
+- The compiled Semantic Model
+- Generated Artifacts
+- The Engineering IR
+- Historical Versions
+
+This completely eliminates context loss, allowing any AI model to seamlessly jump into a project months later and understand the exact state of the system.
+
+---
+
+## 🎯 The Real Differentiator
+
+What makes Fénix fundamentally different from tools like Cursor, Claude Code, Aider, or OpenHands?
+
+- **Custom Compiler:** A bespoke Language System built from scratch.
+- **Three DSLs:** FDL, WDL, and PMF to model the entire SDLC.
+- **Canonical IR & Engineering IR:** Structured representations instead of raw text prompts.
+- **Declarative Architecture:** You declare the end-state, Fénix figures out the execution.
+- **Decoupled Runtime:** The Language System is cleanly separated from the Multi-Agent Execution Runtime.
+- **Advanced Product Memory:** True semantic understanding of the software product.
+- **Model Agnostic:** Swap Claude, Gemini, or local LLMs seamlessly under the Fénix Runtime.
+
+## 🌐 Model Agnostic Architecture
+
+Fénix separates the execution engine from agent definitions, making it possible to support multiple AI ecosystems without modifying the project itself:
+
+### Supported AI Platforms
+
+- **Claude Code** - Anthropic's AI coding assistant
+- **Antigravity** - Advanced AI platform
+- **Local LLMs** - Run locally hosted models (Ollama, llama.cpp, etc.)
+- **Cloud LLM Providers** - OpenAI, Google Gemini, Azure OpenAI, etc.
+- **Future AI coding assistants** - Extensible architecture for future platforms
+
+### How It Works
+
+The Fénix Runtime uses adapters to communicate with different AI providers:
+
+```text
+Fénix Runtime
+    │
+    ├─→ Claude Adapter
+    ├─→ OpenAI Adapter
+    ├─→ Gemini Adapter
+    ├─→ Local LLM Adapter
+    └─→ Custom Adapter (extensible)
+```
+
+This architecture allows you to:
+- Switch between AI providers without changing your FDL/WDL files
+- Use different models for different tasks (e.g., Claude for architecture, local LLM for code generation)
+- Mix and match providers in a single workflow
+- Add new AI platforms as they emerge
+
+---
+
+## 📁 Repository Structure
+
+```text
 fenix-ai-sdlc/
 
-├── engine/
-├── installer/
-├── runtime/
-├── adapters/
-├── definitions/
-├── templates/
-├── docs/
-├── examples/
-├── tests/
-└── tools/
+├── core/          # Core platform utilities
+│   ├── language/  # The Fénix Language System (Lexer, Parser, AST, Binder)
+│   ├── compiler/  # Semantic Analysis, Canonical IR, Engineering IR
+│   ├── runtime/   # Execution Engine, Agent Orchestrator
+│   ├── memory/    # Product Memory & Knowledge Graph
+│   └── validation/# Quality and Standards Validation
+├── adapters/      # Integrations with external AI models (Claude, Gemini, etc.)
+├── templates/     # Project and code generation templates
+├── definitions/   # Standard library of FDL/WDL/PMF definitions
+├── docs/          # Specifications (Series 100, 200, 300) and architecture
+└── tools/         # CLI, Dashboard, and internal tooling
 ```
 
 ---
 
-# 🧠 Main Components
+## 📚 Documentation
 
-## Engine
+### Getting Started
 
-The core orchestration engine responsible for coordinating all workflows.
+- **[QUICKSTART.md](QUICKSTART.md)** - Understand Fénix in 5 minutes
+- **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Complete developer guide (setup, architecture, contribution)
+- **[ROADMAP.md](ROADMAP.md)** - Implementation roadmap by phases
 
----
+### Technical Specifications
 
-## Runtime
+- **[SPEC-000](fenix-docs/spec/series-000/)** - Kernel API Contracts (ExecutionPackage, Memory Manager)
+- **[SPEC-100](fenix-docs/spec/series-100/)** - Engineering Runtime & IR (FDL/WDL/PMF Semantics)
+- **[SPEC-200](fenix-docs/spec/series-200/)** - Repository Layout & Build System
+- **[SPEC-300](fenix-docs/spec/series-300/)** - Language System Architecture (Lexer, Parser, AST, Binder)
+- **[SPEC-400](fenix-docs/spec/series-400/)** - Compiler Host Architecture (Workspace, Snapshots, Scheduler)
 
-Executes pipelines, manages state, and coordinates agent execution.
+### Architecture Decisions
 
----
+- **[ADRs](fenix-docs/adr/)** - Architecture Decision Records (Operating Model, Domain Model, etc.)
 
-## Agents
+### Examples
 
-Specialized AI agents responsible for specific engineering tasks.
+- **[FDL Examples](fenix-examples/fdl/)** - Product definition examples (Booking System, Todo App)
+- **[WDL Examples](fenix-examples/wdl/)** - Workflow definition examples (SaaS Development, Feature Development)
 
-Examples:
+### Integration
 
-- Product Agent
-- Requirements Agent
-- Architecture Agent
-- Backend Agent
-- Frontend Agent
-- Database Agent
-- QA Agent
-- DevOps Agent
-- Documentation Agent
+- **[Integration Guide](fenix-docs/INTEGRATION.md)** - How to integrate with Claude, Antigravity, OpenAI, and other AI providers
 
----
+## 🤝 Contributing
 
-## Skills
+Fénix is currently in the implementation phase following the [ROADMAP.md](ROADMAP.md).
 
-Reusable capabilities shared among agents.
+We welcome contributions! Please read the [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) for:
+- Environment setup
+- Code standards
+- Testing guidelines
+- Contribution workflow
 
-Examples:
+### Current Focus
 
-- Compile Project
-- Generate Tests
-- Review Code
-- Analyze Logs
-- Generate Documentation
-- Generate Diagrams
-- Build Docker Images
-- Create Pipelines
+According to the roadmap, we're prioritizing **Phase 1: Kernel Foundation (SPEC-000)**. See [ROADMAP.md](ROADMAP.md) for details on how to contribute.
 
 ---
 
-## Product Memory
-
-Stores all project knowledge.
-
-Examples:
-
-- Product Vision
-- Business Rules
-- Decisions
-- Architecture
-- Backlog
-- Requirements
-- Lessons Learned
-- Technical Debt
-
----
-
-## Validation Engine
-
-Responsible for validating:
-
-- Code quality
-- Architecture
-- Documentation
-- Security
-- Tests
-- Standards
-
----
-
-## Report Engine
-
-Automatically generates reports for:
-
-- Progress
-- Quality
-- Coverage
-- Security
-- Releases
-- Technical Debt
-
----
-
-## Adapters
-
-Adapters allow Fenix to integrate with different AI platforms.
-
-Initial targets:
-
-- Claude Code
-- Antigravity
-
-Future support:
-
-- Cursor
-- Codex CLI
-- Gemini CLI
-- OpenHands
-- Aider
-
----
-
-# 🔄 SDLC Coverage
-
-Fenix aims to automate every stage of the Software Development Life Cycle.
-
-- Discovery
-- Business Analysis
-- Requirements Engineering
-- Product Planning
-- MVP Definition
-- Architecture
-- UI/UX
-- Development
-- Code Review
-- Testing
-- Documentation
-- Deployment
-- Monitoring
-- Maintenance
-- Continuous Improvement
-
----
-
-# ⚡ Parallel Execution
-
-Fenix is designed to execute independent tasks simultaneously.
-
-Example:
-
-```
-Architecture Agent
-        │
-        ├─────────────┐
-        │             │
-Backend Agent     Database Agent
-        │             │
-        └──────┬──────┘
-               │
-        Testing Agent
-               │
-        Validation Engine
-               │
-        Documentation Agent
-```
-
----
-
-# 🎨 Declarative Configuration
-
-Fenix is driven by definitions instead of hardcoded logic.
-
-Examples:
-
-- Agents
-- Skills
-- Pipelines
-- Templates
-- Standards
-- Profiles
-- Rules
-
-Everything should be configurable.
-
----
-
-# 📚 Product Memory
-
-One of Fenix's main goals is to eliminate context loss.
-
-Every important project decision becomes part of the Product Memory, allowing any AI model to understand the project even after months of inactivity.
-
----
-
-# 🛠 Planned Features
-
-- Universal installer
-- AI model detection
-- Agent orchestration
-- Parallel execution engine
-- Persistent project memory
-- Declarative pipelines
-- Validation engine
-- Reporting engine
-- UI/UX generation
-- Documentation generation
-- Automated testing
-- Deployment automation
-- Multi-model support
-- Plugin architecture
-
----
-
-# 🤝 Contributing
-
-This project is currently in its early design phase.
-
-Contributions, discussions, architecture proposals, and feedback are welcome.
-
----
-
-# 📄 License
+## 📄 License
 
 License to be defined.
-
----
-
-# 🌍 Long-Term Vision
-
-Fenix AI SDLC aims to become the standard open platform for AI-driven software engineering, enabling teams to build, maintain, and evolve software through coordinated AI agents while preserving project knowledge and engineering best practices.

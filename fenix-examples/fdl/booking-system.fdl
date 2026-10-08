@@ -1,0 +1,296 @@
+# Fénix Definition Language (FDL) Example
+# Booking Automation System for Small Clinics
+
+product BookingAutomation
+
+vision
+    Automate the reservation process for small clinics, eliminating manual phone calls
+    and reducing no-shows by 40%. The system will provide a modern web interface for
+    patients to book appointments 24/7, with automatic SMS reminders and integration
+    with existing clinic management systems.
+
+users
+    Administrator
+        Manages clinic settings, providers, and schedules
+        Can override bookings and generate reports
+
+    Provider
+        Doctor or healthcare provider
+        Manages their own availability and appointments
+        Can accept/reject patient requests
+
+    Customer
+        Patient looking to book appointments
+        Can view available slots and book appointments
+        Receives SMS reminders
+
+constraints
+    OAuth2
+        AzureAD integration for staff authentication
+
+    GDPR
+        All patient data must be encrypted at rest
+        Audit logs for all data access
+        Right to be forgotten implementation
+
+    HIPAA
+        PHI must be stored in compliant database
+        Access controls by role
+        Breach notification procedures
+
+    MaxLatency: 200ms
+        API responses must be under 200ms for critical operations
+
+    Availability: 99.9%
+        System uptime SLA
+
+feature Authentication
+    story UserLogin
+        requirement
+            Users authenticate using Azure AD OAuth2
+            Sessions expire after 15 minutes of inactivity
+            Password reset via email verification
+            Multi-factor authentication for administrators
+        acceptance
+            Given a valid Azure AD token
+            When the user attempts to login
+            Then the system issues a JWT and redirects to Dashboard
+            And the JWT contains user role and permissions
+        architecture
+            API
+                AuthenticationService
+                    Handles OAuth2 flow
+                    Issues JWT tokens
+                    Validates sessions
+                JwtProvider
+                    Generates and validates JWTs
+                    Handles token refresh
+                UserRepository
+                    Stores user profiles and roles
+                AuditLogger
+                    Logs all authentication events
+        tests
+            Integration: Verify AzureAD handshake
+            Unit: JWT decoding and validation
+            Security: Test session expiration
+            Security: Test MFA flow
+
+    story PasswordReset
+        requirement
+            Users can request password reset via email
+            Reset links expire after 1 hour
+            New passwords must meet complexity requirements
+        acceptance
+            Given a user requests password reset
+            When they click the email link
+            Then they can set a new password
+            And the old password is immediately invalidated
+        architecture
+            API
+                PasswordResetService
+                    Generates reset tokens
+                    Validates reset links
+                    Updates passwords
+            EmailService
+                Sends reset emails
+            SecurityService
+                Enforces password complexity
+        tests
+            Unit: Token generation and validation
+            Integration: Email delivery
+            Security: Token expiration
+
+feature Scheduling
+    story BookAppointment
+        requirement
+            Customer selects an available time slot
+            Slot must be locked for 5 minutes during checkout
+            Customer provides reason for visit
+            Insurance information collected if applicable
+        acceptance
+            Given a customer views available slots
+            When they select a slot and confirm booking
+            Then the slot is reserved for 5 minutes
+            And they must complete checkout within 5 minutes
+            And upon completion, they receive confirmation SMS
+        architecture
+            Database
+                PostgreSQL (Isolation Level: Serializable)
+                    Stores appointments with row-level locking
+                    Enforces slot uniqueness
+            Cache
+                Redis (Distributed Lock)
+                    Manages slot reservations
+                    Handles 5-minute timeout
+            API
+                BookingService
+                    Creates reservation
+                    Handles checkout flow
+                SmsService
+                    Sends confirmation SMS
+        tests
+            Integration: PostgreSQL locking
+            Integration: Redis distributed lock
+            Unit: Checkout timeout logic
+            Load: Test concurrent booking attempts
+
+    story ManageAvailability
+        requirement
+            Providers can set recurring availability
+            Providers can block specific time ranges
+            Providers can set maximum daily appointments
+        acceptance
+            Given a provider wants to set availability
+            When they configure their schedule
+            Then the system stores their recurring patterns
+            And they can override specific dates
+        architecture
+            Database
+                PostgreSQL
+                    Stores availability patterns
+                    Stores exceptions and overrides
+            API
+                AvailabilityService
+                    Manages recurring patterns
+                    Handles exceptions
+                CalendarService
+                    Generates available slots from patterns
+        tests
+            Unit: Pattern generation logic
+            Integration: Override handling
+            Unit: Slot generation algorithm
+
+feature Notifications
+    story AppointmentReminders
+        requirement
+            Send SMS reminder 24 hours before appointment
+            Send SMS reminder 2 hours before appointment
+            Allow patients to cancel via SMS reply
+        acceptance
+            Given an appointment is scheduled
+            When the appointment time approaches
+            Then the system sends SMS reminders
+            And patients can reply CANCEL to cancel
+        architecture
+            External Services
+                Twilio API
+                    Sends SMS messages
+                    Handles inbound replies
+            Background Services
+                ReminderWorker
+                    Scans for upcoming appointments
+                    Queues SMS sends
+            API
+                NotificationService
+                    Manages notification preferences
+                    Tracks delivery status
+        tests
+            Integration: Twilio API
+            Unit: Reminder scheduling logic
+            Unit: Reply parsing
+
+feature Reporting
+    story GenerateReports
+        requirement
+            Administrators can generate appointment reports
+            Reports can be filtered by date range, provider, status
+            Reports exportable to CSV and PDF
+        acceptance
+            Given an administrator wants reports
+            When they select filters and generate
+            Then the system aggregates appointment data
+            And exports in requested format
+        architecture
+            Database
+                PostgreSQL
+                    Optimized queries for reporting
+                    Materialized views for common reports
+            API
+                ReportService
+                    Generates report queries
+                    Handles export formats
+                FileService
+                    Stores generated reports
+        tests
+            Integration: Report query performance
+            Unit: CSV export generation
+            Unit: PDF export generation
+
+feature Integrations
+    story EHRIntegration
+        requirement
+            Sync appointment data with external EHR systems
+            Support HL7 FHIR standard
+            Handle bi-directional sync
+        acceptance
+            Given an appointment is created
+            When the sync process runs
+            Then the data is sent to the EHR system
+            And any changes in EHR are reflected in Fénix
+        architecture
+            External Services
+                EHR API (FHIR-compliant)
+                    Receives appointment data
+                    Provides patient demographics
+            Background Services
+                SyncWorker
+                    Processes outbound sync
+                    Polls for inbound changes
+            API
+                IntegrationService
+                    Maps data to FHIR format
+                    Handles retry logic
+        tests
+            Integration: FHIR mapping
+            Integration: Retry logic
+            Unit: Change detection
+
+implementation
+    Backend
+        Language: Go 1.22+
+        Framework: Chi router
+        Database: PostgreSQL 15
+        Cache: Redis 7
+        Message Queue: RabbitMQ (for background jobs)
+
+    Frontend
+        Framework: React 18
+        Meta-framework: Next.js 14
+        UI Library: shadcn/ui
+        State Management: Zustand
+        Forms: React Hook Form
+
+    Mobile
+        Framework: Flutter 3
+        State: Riverpod
+        Navigation: GoRouter
+
+    Infrastructure
+        Hosting: AWS
+        Compute: ECS Fargate
+        Database: RDS PostgreSQL
+        Cache: ElastiCache Redis
+        CDN: CloudFront
+        Monitoring: Datadog
+
+release
+    v1.0
+        scope
+            MVP with core features
+            Authentication (Azure AD)
+            Scheduling (book, manage availability)
+            Basic notifications (SMS reminders)
+            Simple reporting
+
+    v1.1
+        scope
+            Enhanced reporting
+            EHR integration (single provider)
+            Mobile app (iOS only)
+
+    v2.0
+        scope
+            Multi-tenant support
+            Advanced EHR integrations
+            Mobile app (Android)
+            Telehealth integration
